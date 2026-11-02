@@ -38,6 +38,9 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, number>>({});
+  const userAnswersRef = useRef<Record<string, number>>({});
+  const elapsedTotalSecondsRef = useRef(0);
+  const submittedRef = useRef(false);
   const [flaggedIndices, setFlaggedIndices] = useState<Set<number>>(new Set());
   const [showNavGrid, setShowNavGrid] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -66,7 +69,8 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
   // Overall Timer effect
   useEffect(() => {
     timerRef.current = setInterval(() => {
-      setElapsedTotalSeconds(prev => prev + 1);
+      elapsedTotalSecondsRef.current += 1;
+      setElapsedTotalSeconds(elapsedTotalSecondsRef.current);
 
       setSecondsRemaining(prev => {
         if (mode === 'speed_challenge') {
@@ -84,7 +88,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
           // Mock / Drill countdown
           if (prev <= 1) {
             clearInterval(timerRef.current!);
-            handleFinalSubmit();
+            setTimeout(handleFinalSubmit, 0);
             return 0;
           }
           return prev - 1;
@@ -121,10 +125,9 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
     const isCorrect = optionIndex === currentQuestion.correctAnswer;
     sound.playTap();
 
-    setUserAnswers(prev => ({
-      ...prev,
-      [currentQuestion.id]: optionIndex
-    }));
+    const nextAnswers = { ...userAnswersRef.current, [currentQuestion.id]: optionIndex };
+    userAnswersRef.current = nextAnswers;
+    setUserAnswers(nextAnswers);
 
     if (isCorrect) {
       markAsMastered(currentQuestion.id);
@@ -201,14 +204,18 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
   };
 
   const handleFinalSubmit = () => {
+    if (submittedRef.current) return;
+    submittedRef.current = true;
     if (timerRef.current) clearInterval(timerRef.current);
+    const finalUserAnswers = userAnswersRef.current;
+    const finalElapsedTotalSeconds = elapsedTotalSecondsRef.current;
 
     // Compute automatic scoring per subsection
     const subsectionScores: Record<string, SubsectionScore> = {};
     let totalCorrect = 0;
 
     questions.forEach(q => {
-      const chosen = userAnswers[q.id];
+      const chosen = finalUserAnswers[q.id];
       const isRight = chosen === q.correctAnswer;
       if (isRight) totalCorrect += 1;
 
@@ -252,9 +259,9 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
       totalCorrect,
       overallPercentage: overallPct,
       passed,
-      timeSpentSeconds: elapsedTotalSeconds,
+      timeSpentSeconds: finalElapsedTotalSeconds,
       subsectionScores,
-      userAnswers,
+      userAnswers: finalUserAnswers,
       questionIds: questions.map(q => q.id),
       xpEarned
     };
