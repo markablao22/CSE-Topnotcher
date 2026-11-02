@@ -238,7 +238,7 @@ export const SimulatedExamEngine: React.FC<SimulatedExamEngineProps> = ({
       passed,
       timeSpentSeconds: finalElapsedSeconds,
       subsectionScores,
-      userAnswers,
+      userAnswers: finalUserAnswers,
       questionIds: questions.map(q => q.id),
       xpEarned
     };
