@@ -120,7 +120,7 @@ export function loadExamHistory(): ExamResult[] {
   }
 }
 
-export function saveExamResult(result: ExamResult): void {
+export function saveExamResult(result: ExamResult, incorrectQuestionIds: string[] = []): void {
   try {
     const history = loadExamHistory();
     history.unshift(result);
@@ -142,11 +142,10 @@ export function saveExamResult(result: ExamResult): void {
     profile.studyHistory[today] = (profile.studyHistory[today] || 0) + minutesSpent;
     profile.todayStudyMinutes = profile.studyHistory[today];
 
-    // Update incorrect question IDs
-    Object.entries(result.userAnswers).forEach(([qId, ans]) => {
-      // Find whether correct: we can track incorrects
-      const isIncorrect = result.questionIds.includes(qId) && !profile.incorrectQuestionIds.includes(qId);
-    });
+    // Persist mistakes supplied by the exam engine's answer-key comparison.
+    const incorrectIds = [...new Set(incorrectQuestionIds)].filter(id => result.questionIds.includes(id));
+    profile.incorrectQuestionIds = [...new Set([...profile.incorrectQuestionIds, ...incorrectIds])];
+    profile.masteredQuestionIds = profile.masteredQuestionIds.filter(id => !incorrectIds.includes(id));
 
     saveUserProfile(profile);
   } catch {
