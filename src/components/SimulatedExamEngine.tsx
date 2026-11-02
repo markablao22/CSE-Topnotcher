@@ -100,11 +100,8 @@ export const SimulatedExamEngine: React.FC<SimulatedExamEngineProps> = ({
   // Timer loop with official proctor announcements
   useEffect(() => {
     timerRef.current = setInterval(() => {
-      setElapsedSeconds(prev => {
-        const next = prev + 1;
-        elapsedSecondsRef.current = next;
-        return next;
-      });
+      elapsedSecondsRef.current += 1;
+      setElapsedSeconds(elapsedSecondsRef.current);
 
       setSecondsRemaining(prev => {
         // Proctor announcements at specific intervals
@@ -127,7 +124,7 @@ export const SimulatedExamEngine: React.FC<SimulatedExamEngineProps> = ({
 
         if (prev <= 1) {
           clearInterval(timerRef.current!);
-          handleFinalSubmit();
+          setTimeout(handleFinalSubmit, 0);
           return 0;
         }
         return prev - 1;
@@ -143,11 +140,9 @@ export const SimulatedExamEngine: React.FC<SimulatedExamEngineProps> = ({
     if (!currentQuestion) return;
     sound.playTap();
 
-    setUserAnswers(prev => {
-      const next = { ...prev, [currentQuestion.id]: optionIndex };
-      userAnswersRef.current = next;
-      return next;
-    });
+    const nextAnswers = { ...userAnswersRef.current, [currentQuestion.id]: optionIndex };
+    userAnswersRef.current = nextAnswers;
+    setUserAnswers(nextAnswers);
   };
 
   const toggleFlag = () => {
