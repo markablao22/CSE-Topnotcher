@@ -23,22 +23,27 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
   const [preset, setPreset] = useState<'official_full' | 'half_length' | 'diagnostic_50'>('official_full');
 
   const blueprint = OFFICIAL_CSC_BLUEPRINT[level];
+  const getPresetCategoryCount = (item: typeof blueprint.categoryBreakdown[number]) => {
+    const available = SUBSECTIONS_META[item.category]?.totalAvailable ?? 0;
+    const target = preset === 'official_full'
+      ? item.count
+      : preset === 'half_length'
+      ? Math.max(Math.round(item.count / 2), 5)
+      : Math.max(Math.round(item.count * (50 / blueprint.totalQuestions)), 5);
+    return Math.min(available, target);
+  };
 
   // Simulated Examinee ID & Testing Room
   const examineeNumber = `2026-${level === 'professional' ? 'PROF' : 'SUBP'}-${Math.abs(userProfile.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 1000) * 7 % 90000 + 10000)}`;
   const roomAssignment = `Room 204 · Bulwagang Rizal, Testing Center #07`;
 
-  const totalQuestions = preset === 'official_full' 
-    ? blueprint.totalQuestions 
-    : preset === 'half_length' 
-    ? Math.round(blueprint.totalQuestions / 2) 
-    : 50;
+  const totalQuestions = blueprint.categoryBreakdown.reduce(
+    (sum, item) => sum + getPresetCategoryCount(item), 0
+  );
 
-  const timeLimit = preset === 'official_full'
-    ? blueprint.timeLimitMinutes
-    : preset === 'half_length'
-    ? Math.round(blueprint.timeLimitMinutes / 2)
-    : 60;
+  const timeLimit = preset === 'diagnostic_50'
+    ? 60
+    : Math.max(1, Math.round(blueprint.timeLimitMinutes * (totalQuestions / blueprint.totalQuestions)));
 
   const hours = Math.floor(timeLimit / 60);
   const minutes = timeLimit % 60;
@@ -69,7 +74,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
               Practice Simulation ng Career Service Examination
             </h1>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
-              Nagbibigay ng practice questions, timer at OMR-style answer sheet simulation. Ang bilang ng tanong, oras at 80% practice target ay configuration ng app at hindi opisyal na CSC exam materials.
+              May OMR-style answer sheet, countdown timer, at automatic practice scoring. Ang aktuwal na bilang ng tanong ay nakadepende sa kasalukuyang question bank; hindi ito opisyal na CSC exam.
             </p>
           </div>
 
@@ -125,7 +130,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
                   {level === 'professional' && <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />}
                 </div>
                 <div className="text-xs text-amber-700 dark:text-amber-400 font-semibold mb-2">
-                  170 Items · 3 Oras at 10 Minuto (190 mins)
+                  {blueprint.totalQuestions} Target Items · {blueprint.timeLimitMinutes} minuto target
                 </div>
                 <p className="text-[11px] text-slate-500 leading-relaxed">
                   Sumusuri sa Verbal Ability, Analytical Ability (Syllogisms, Logic), Numerical Ability, at General Information para sa 2nd-level government positions.
@@ -148,7 +153,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
                   {level === 'sub_professional' && <CheckCircle2 className="w-4 h-4 text-amber-600 dark:text-amber-400" />}
                 </div>
                 <div className="text-xs text-amber-700 dark:text-amber-400 font-semibold mb-2">
-                  165 Items · 2 Oras at 40 Minuto (160 mins)
+                  {blueprint.totalQuestions} Target Items · {blueprint.timeLimitMinutes} minuto target
                 </div>
                 <p className="text-[11px] text-slate-500 leading-relaxed">
                   Sumusuri sa Verbal Ability, Clerical Ability (Alphabetical Indexing, Filing Rules), Numerical, at General Info para sa 1st-level clerical roles.
@@ -185,7 +190,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 mt-1">
-                    Full-length practice set gamit ang distribution na naka-configure sa app.
+                    Available full-length practice set. Ang bilang at section distribution ay limitado sa kasalukuyang question bank.
                   </p>
                 </div>
                 <span className="font-extrabold text-sm text-amber-700 dark:text-amber-300 whitespace-nowrap">
@@ -250,7 +255,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
             <div className="space-y-2.5">
               {blueprint.categoryBreakdown.map(item => {
                 const meta = SUBSECTIONS_META[item.category];
-                const count = preset === 'official_full' ? item.count : Math.max(Math.round(item.count * (totalQuestions / blueprint.totalQuestions)), 5);
+                const count = getPresetCategoryCount(item);
 
                 return (
                   <div key={item.category} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3 text-xs">
