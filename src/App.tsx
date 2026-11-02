@@ -15,6 +15,7 @@ import { UserProfileModal } from './components/UserProfileModal';
 import { SimulatedExamSetup } from './components/SimulatedExamSetup';
 import { SimulatedExamEngine } from './components/SimulatedExamEngine';
 import { SimulatedExamReport } from './components/SimulatedExamReport';
+import { RoadmapView } from './components/RoadmapView';
 
 import { 
   ALL_QUESTIONS, 
@@ -38,7 +39,8 @@ import {
   loadUserProfile, 
   saveUserProfile, 
   saveExamResult, 
-  loadLeaderboard 
+  loadLeaderboard,
+  loadExamHistory
 } from './utils/storage';
 import { sound } from './utils/sound';
 
@@ -62,6 +64,9 @@ export default function App() {
 
   // Leaderboard entries
   const [leaderboardList, setLeaderboardList] = useState<LeaderboardEntry[]>(loadLeaderboard());
+
+  // Exam history for diagnostic scoring and roadmap
+  const [examHistory, setExamHistory] = useState<ExamResult[]>(loadExamHistory());
 
   // Initialize theme & sound from storage/system
   useEffect(() => {
@@ -133,6 +138,7 @@ export default function App() {
     setLastExamResult(result);
     setUserProfile(loadUserProfile());
     setLeaderboardList(loadLeaderboard());
+    setExamHistory(loadExamHistory());
     setCurrentTab('simulated_report');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -200,6 +206,7 @@ export default function App() {
     setLastExamResult(result);
     setUserProfile(loadUserProfile());
     setLeaderboardList(loadLeaderboard());
+    setExamHistory(loadExamHistory());
     setCurrentTab('results');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -225,6 +232,9 @@ export default function App() {
             setCurrentTab('simulated_setup');
           } else if (tab === 'speed_rush') {
             handleStartSpeedRush();
+          } else if (tab === 'roadmap') {
+            setExamHistory(loadExamHistory());
+            setCurrentTab('roadmap');
           } else {
             setCurrentTab(tab);
           }
@@ -245,6 +255,11 @@ export default function App() {
             userProfile={userProfile}
             onOpenSimulatedExam={() => {
               setCurrentTab('simulated_setup');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenRoadmap={() => {
+              setExamHistory(loadExamHistory());
+              setCurrentTab('roadmap');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             onStartMockExam={handleStartMockExam}
@@ -319,6 +334,11 @@ export default function App() {
                 setCurrentTab('simulated_setup');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
+              onOpenRoadmap={() => {
+                setExamHistory(loadExamHistory());
+                setCurrentTab('roadmap');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
               onStartMockExam={handleStartMockExam}
               onStartDrill={handleStartDrill}
               onStartSpeedRush={handleStartSpeedRush}
@@ -328,6 +348,30 @@ export default function App() {
               onOpenProfile={() => setIsProfileModalOpen(true)}
             />
           </div>
+        )}
+
+        {/* Dedicated CSC Coverage Roadmap & Weakest Area Recommender */}
+        {currentTab === 'roadmap' && (
+          <RoadmapView
+            userProfile={userProfile}
+            examHistory={examHistory}
+            allQuestions={ALL_QUESTIONS}
+            onStartDrill={handleStartDrill}
+            onStartSimulatedExam={() => {
+              setCurrentTab('simulated_setup');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onPracticeMistakes={() => {
+              const wrongQuestions = userProfile.incorrectQuestionIds
+                .map(id => ALL_QUESTIONS.find(q => q.id === id))
+                .filter((q): q is Question => q !== undefined);
+              if (wrongQuestions.length > 0) {
+                handleStartMistakesDrill(wrongQuestions);
+              } else {
+                setCurrentTab('mistakes');
+              }
+            }}
+          />
         )}
 
         {currentTab === 'exam' && activeExamQuestions.length > 0 && (

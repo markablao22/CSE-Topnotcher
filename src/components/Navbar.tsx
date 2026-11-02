@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Moon, Sun, User as UserIcon, Flame, Trophy, ShieldCheck } from 'lucide-react';
+import { Volume2, VolumeX, Moon, Sun, User as UserIcon, Flame, Trophy, ShieldCheck, Compass } from 'lucide-react';
 import { sound } from '../utils/sound';
 import { UserProfile } from '../types/quiz';
 
@@ -79,6 +79,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <ShieldCheck className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
               <span>Simulated Exam</span>
+            </button>
+            <button
+              onClick={() => { sound.playTap(); onSelectTab('roadmap'); }}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+                currentTab === 'roadmap'
+                  ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 font-bold'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5 text-amber-500" />
+              <span>Roadmap</span>
             </button>
             <button
               onClick={() => { sound.playTap(); onSelectTab('drills'); }}
@@ -200,6 +211,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             className={`px-2.5 py-1 text-xs font-bold rounded-md whitespace-nowrap ${currentTab.startsWith('simulated') ? 'bg-amber-500 text-slate-950' : 'text-slate-600 dark:text-slate-300'}`}
           >
             🏛️ Simulated Exam
+          </button>
+          <button
+            onClick={() => { sound.playTap(); onSelectTab('roadmap'); }}
+            className={`px-2.5 py-1 text-xs font-medium rounded-md whitespace-nowrap ${currentTab === 'roadmap' ? 'bg-amber-600 text-white font-bold' : 'text-slate-600 dark:text-slate-300'}`}
+          >
+            🧭 Roadmap
           </button>
           <button
             onClick={() => { sound.playTap(); onSelectTab('drills'); }}

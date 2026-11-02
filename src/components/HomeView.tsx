@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Award, Clock, Zap, BookOpen, Trophy, 
   BarChart3, AlertCircle, Sparkles, CheckCircle2, 
-  ArrowRight, ShieldCheck, Flame, ChevronRight, HelpCircle
+  ArrowRight, ShieldCheck, Flame, ChevronRight, HelpCircle, Compass
 } from 'lucide-react';
 import { UserProfile, ExamLevel, SubtestCategory } from '../types/quiz';
 import { SUBSECTIONS_META } from '../data/questions';
@@ -11,6 +11,7 @@ import { sound } from '../utils/sound';
 interface HomeViewProps {
   userProfile: UserProfile;
   onOpenSimulatedExam: () => void;
+  onOpenRoadmap?: () => void;
   onStartMockExam: (level: ExamLevel, count: number) => void;
   onStartDrill: (category: SubtestCategory, instantFeedback: boolean) => void;
   onStartSpeedRush: () => void;
@@ -23,6 +24,7 @@ interface HomeViewProps {
 export const HomeView: React.FC<HomeViewProps> = ({
   userProfile,
   onOpenSimulatedExam,
+  onOpenRoadmap,
   onStartMockExam,
   onStartDrill,
   onStartSpeedRush,
@@ -321,6 +323,36 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
       </div>
+
+      {/* CSC Coverage Roadmap & Weakest Area Recommender Banner */}
+      {onOpenRoadmap && (
+        <div className="rounded-2xl p-6 bg-gradient-to-r from-amber-500/10 via-indigo-500/10 to-amber-500/10 border border-amber-500/30 dark:border-amber-500/20 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-1.5 text-center md:text-left">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+              <Compass className="w-3.5 h-3.5 text-amber-500" />
+              Opisyal na Gabay sa Pag-unlad
+            </div>
+            <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">
+              CSC Coverage Roadmap at Rekomendasyon sa Mahinang Paksa
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl">
+              Tuklasin kung saang subseksyon ka pinaka-nangangailangan ng pagsasanay (Numerical, Verbal, Analytical, Clerical, o General Information) at subaybayan ang iyong CSC Readiness Index.
+            </p>
+          </div>
+
+          <button
+            onClick={() => {
+              sound.playTap();
+              onOpenRoadmap();
+            }}
+            className="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 transition-all shadow-sm flex items-center gap-2 shrink-0"
+          >
+            <Compass className="w-4 h-4" />
+            <span>Buksan ang Roadmap</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Mode 1: Mock Exam Configuration Card */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xs">
