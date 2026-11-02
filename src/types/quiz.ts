@@ -79,6 +79,9 @@ export interface UserProfile {
   longestStreak?: number;
   lastActiveDate?: string;
   streakDaysActive?: string[];
+  dailyGoalMinutes: number; // Target daily study time in minutes
+  todayStudyMinutes: number; // Time studied today in minutes
+  studyHistory?: Record<string, number>; // YYYY-MM-DD -> minutes studied
   examsCompleted: number;
   bestRating: number;
   bookmarkedQuestionIds: string[];

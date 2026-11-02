@@ -16,6 +16,10 @@ const DEFAULT_PROFILE: UserProfile = {
   targetLevel: 'professional',
   totalXp: 0,
   currentStreak: 1,
+  longestStreak: 1,
+  dailyGoalMinutes: 30,
+  todayStudyMinutes: 0,
+  studyHistory: {},
   examsCompleted: 0,
   bestRating: 0,
   bookmarkedQuestionIds: [],
@@ -70,6 +74,15 @@ export function loadUserProfile(): UserProfile {
       saveUserProfile(profile);
     }
 
+    // Ensure daily goal and study history are present
+    if (!profile.dailyGoalMinutes || profile.dailyGoalMinutes < 5) {
+      profile.dailyGoalMinutes = 30;
+    }
+    if (!profile.studyHistory) {
+      profile.studyHistory = {};
+    }
+    profile.todayStudyMinutes = profile.studyHistory[today] || 0;
+
     return profile;
   } catch {
     return DEFAULT_PROFILE;
@@ -81,6 +94,20 @@ export function saveUserProfile(profile: UserProfile): void {
     localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(profile));
   } catch {
     // Ignore storage errors
+  }
+}
+
+export function recordStudyMinutes(minutes: number): UserProfile {
+  try {
+    const profile = loadUserProfile();
+    const today = getTodayDateString();
+    if (!profile.studyHistory) profile.studyHistory = {};
+    profile.studyHistory[today] = (profile.studyHistory[today] || 0) + Math.max(1, minutes);
+    profile.todayStudyMinutes = profile.studyHistory[today];
+    saveUserProfile(profile);
+    return profile;
+  } catch {
+    return DEFAULT_PROFILE;
   }
 }
 
@@ -101,18 +128,24 @@ export function saveExamResult(result: ExamResult): void {
 
     // Update user profile
     const profile = loadUserProfile();
+    const today = getTodayDateString();
     profile.examsCompleted += 1;
     profile.totalXp += result.xpEarned;
     if (result.overallPercentage > profile.bestRating) {
       profile.bestRating = result.overallPercentage;
     }
 
+    // Track study minutes for the day
+    const seconds = result.timeSpentSeconds || 60;
+    const minutesSpent = Math.max(1, Math.round(seconds / 60));
+    if (!profile.studyHistory) profile.studyHistory = {};
+    profile.studyHistory[today] = (profile.studyHistory[today] || 0) + minutesSpent;
+    profile.todayStudyMinutes = profile.studyHistory[today];
+
     // Update incorrect question IDs
     Object.entries(result.userAnswers).forEach(([qId, ans]) => {
       // Find whether correct: we can track incorrects
-      // If ans was incorrect, push into incorrectQuestionIds
       const isIncorrect = result.questionIds.includes(qId) && !profile.incorrectQuestionIds.includes(qId);
-      // We will refine with actual question correctness when passed
     });
 
     saveUserProfile(profile);

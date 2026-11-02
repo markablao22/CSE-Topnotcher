@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Award, Clock, Zap, BookOpen, Trophy, 
   BarChart3, AlertCircle, Sparkles, CheckCircle2, 
-  ArrowRight, ShieldCheck, Flame, ChevronRight, HelpCircle, Compass
+  ArrowRight, ShieldCheck, Flame, ChevronRight, HelpCircle, Compass, Target
 } from 'lucide-react';
 import { UserProfile, ExamLevel, SubtestCategory } from '../types/quiz';
 import { SUBSECTIONS_META } from '../data/questions';
@@ -36,6 +36,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
   const [mockLevel, setMockLevel] = useState<ExamLevel>(userProfile.targetLevel);
   const [mockItemCount, setMockItemCount] = useState<number>(50);
   const [drillInstantFeedback, setDrillInstantFeedback] = useState<boolean>(true);
+
+  // Daily study goal metrics
+  const dailyGoalMinutes = userProfile.dailyGoalMinutes || 30;
+  const todayStudyMinutes = userProfile.todayStudyMinutes || 0;
+  const goalProgressPercentage = Math.min(Math.round((todayStudyMinutes / dailyGoalMinutes) * 100), 100);
+  const isGoalMet = todayStudyMinutes >= dailyGoalMinutes;
+  const remainingMinutes = Math.max(0, dailyGoalMinutes - todayStudyMinutes);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
@@ -197,6 +204,95 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </div>
 
+      {/* Daily Study Goal Progress Tracker */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs transition-all">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-3.5">
+          <div className="flex items-center gap-3">
+            <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+              isGoalMet 
+                ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' 
+                : 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
+            }`}>
+              {isGoalMet ? (
+                <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+              ) : (
+                <Target className="w-6 h-6 text-amber-500" />
+              )}
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h4 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
+                  Arawang Target sa Pag-aaral (Daily Study Goal)
+                </h4>
+                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                  isGoalMet
+                    ? 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
+                    : 'bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800'
+                }`}>
+                  {isGoalMet ? 'Target Reached 🎉' : `${goalProgressPercentage}% Completed`}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                {isGoalMet
+                  ? 'Kahanga-hanga! Naabot mo na ang iyong target na oras ngayong araw. Ang ganitong dedikasyon ay garantiya sa mataas na marka!'
+                  : remainingMinutes > 0
+                  ? `Kulang pa ng ${remainingMinutes} minuto upang makumpleto ang ${dailyGoalMinutes} minutong target ngayong araw.`
+                  : 'Simulan ang pag-aaral ngayon upang maabot ang iyong daily study goal!'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 self-start sm:self-auto shrink-0">
+            <div className="text-left sm:text-right">
+              <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tabular-nums">
+                {todayStudyMinutes}{' '}
+                <span className="text-xs font-normal text-slate-500 dark:text-slate-400">
+                  / {dailyGoalMinutes} min
+                </span>
+              </div>
+              <span className="text-[10px] text-slate-400 block">
+                {isGoalMet ? 'Natapos ngayong araw' : 'Oras na naigugol'}
+              </span>
+            </div>
+
+            <button
+              onClick={() => {
+                sound.playTap();
+                onOpenProfile();
+              }}
+              className="text-xs font-semibold px-2.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700"
+              title="I-adjust ang Daily Goal"
+            >
+              I-edit ang Goal
+            </button>
+          </div>
+        </div>
+
+        {/* Progress Bar with animated track & labels */}
+        <div className="space-y-1.5">
+          <div className="relative w-full bg-slate-100 dark:bg-slate-800/90 h-3.5 rounded-full overflow-hidden p-0.5 border border-slate-200/80 dark:border-slate-700/80">
+            <div 
+              className={`h-full rounded-full transition-all duration-700 ease-out ${
+                isGoalMet
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-400 shadow-xs'
+                  : 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 shadow-xs'
+              }`}
+              style={{ width: `${Math.min(goalProgressPercentage, 100)}%` }}
+            />
+          </div>
+
+          <div className="flex items-center justify-between text-[11px] text-slate-500">
+            <span className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+              <Clock className="w-3.5 h-3.5 text-slate-400" />
+              <span>Awtomatikong sinusukat mula sa Simulated Exams, Drills, at Speed Rush</span>
+            </span>
+            <span className="font-bold tabular-nums text-slate-700 dark:text-slate-300">
+              {goalProgressPercentage}% ng target ({todayStudyMinutes}m naitala)
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Aspirant Performance Card & Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
@@ -256,9 +352,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 style={{ width: `${Math.min((userProfile.examsCompleted / 10) * 100, 100)}%` }}
               />
             </div>
-            <span className="text-[11px] text-slate-400 mt-1 block">
-              {userProfile.examsCompleted} mock exams na natapos
-            </span>
+            <div className="flex items-center justify-between text-[11px] text-slate-400 mt-1.5">
+              <span>{userProfile.examsCompleted} mock exams na natapos</span>
+              <span className="font-semibold text-amber-600 dark:text-amber-400 tabular-nums">
+                Target: {todayStudyMinutes}/{dailyGoalMinutes}m
+              </span>
+            </div>
           </div>
         </div>
 

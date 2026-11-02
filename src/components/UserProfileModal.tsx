@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, User, MapPin, Award, Check } from 'lucide-react';
+import { X, User, MapPin, Award, Check, Clock } from 'lucide-react';
 import { UserProfile, ExamLevel } from '../types/quiz';
 import { PHILIPPINE_REGIONS } from '../data/leaderboardData';
 import { sound } from '../utils/sound';
@@ -23,6 +23,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
   const [region, setRegion] = useState(profile.region);
   const [avatar, setAvatar] = useState(profile.avatar);
   const [targetLevel, setTargetLevel] = useState<ExamLevel>(profile.targetLevel);
+  const [dailyGoalMinutes, setDailyGoalMinutes] = useState<number>(profile.dailyGoalMinutes || 30);
 
   if (!isOpen) return null;
 
@@ -34,7 +35,8 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
       name: name.trim() || 'Aspirant',
       region,
       avatar,
-      targetLevel
+      targetLevel,
+      dailyGoalMinutes: Math.max(10, dailyGoalMinutes)
     });
     onClose();
   };
@@ -192,6 +194,56 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
                 </div>
               </button>
             </div>
+          </div>
+
+          {/* Daily Study Goal (in minutes) */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Arawang Target sa Pag-aaral (Daily Goal)
+              </label>
+              <span className="text-xs font-bold text-amber-600 dark:text-amber-400 tabular-nums">
+                {dailyGoalMinutes} minuto bawat araw
+              </span>
+            </div>
+            
+            {/* Quick Presets */}
+            <div className="grid grid-cols-4 gap-2 mb-2">
+              {[15, 30, 45, 60].map((mins) => (
+                <button
+                  key={mins}
+                  type="button"
+                  onClick={() => { sound.playTap(); setDailyGoalMinutes(mins); }}
+                  className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${
+                    dailyGoalMinutes === mins
+                      ? 'bg-amber-500 text-slate-950 font-bold shadow-xs scale-[1.02]'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
+                  }`}
+                >
+                  {mins} min
+                </button>
+              ))}
+            </div>
+
+            {/* Slider with visual numeric display */}
+            <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
+              <Clock className="w-4 h-4 text-slate-400 shrink-0" />
+              <input
+                type="range"
+                min={10}
+                max={120}
+                step={5}
+                value={dailyGoalMinutes}
+                onChange={(e) => setDailyGoalMinutes(Number(e.target.value))}
+                className="w-full accent-amber-500 cursor-pointer"
+              />
+              <span className="text-xs font-extrabold text-slate-900 dark:text-white tabular-nums shrink-0 w-12 text-right">
+                {dailyGoalMinutes}m
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+              Inirerekomenda ang 30–45 minuto bawat araw para sa tuloy-tuloy na pag-unawa at 80%+ passing rate.
+            </p>
           </div>
 
           {/* Action buttons */}
