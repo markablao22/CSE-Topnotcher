@@ -47,15 +47,15 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
       <div className="text-center max-w-2xl mx-auto mb-8 space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
           <Trophy className="w-3.5 h-3.5 text-amber-500" />
-          Pambansang Talaan ng mga Topnotcher
+          Local Practice Leaderboard
         </div>
 
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Makipagkumpetensya sa Kapwa Aspirants
+          Ihambing ang iyong practice scores
         </h1>
 
         <p className="text-sm text-slate-600 dark:text-slate-400">
-          Tingnan ang pinakamataas na marka sa buong bansa. Ipasa ang mock exam na may 80%+ rating upang makasama sa Honor Roll!
+          Mga score na naka-save sa browser na ito kasama ang sample entries. Hindi ito live o pambansang ranking.
         </p>
       </div>
 
@@ -310,10 +310,10 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
       <div className="mt-8 p-6 rounded-2xl bg-slate-900 text-white dark:bg-slate-800/90 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
         <div className="space-y-1 text-center sm:text-left">
           <h3 className="font-bold text-base text-white">
-            Nais mo bang mapabilang sa National Topnotchers?
+            Pagbutihin pa ang iyong practice score
           </h3>
           <p className="text-xs text-slate-300">
-            Kumuha ng Opisyal na Mock Exam o subukan ang 25-segundong Speed Rush upang magtala ng bagong record.
+            Kumuha ng practice exam o subukan ang 25-segundong Speed Rush upang magtala ng bagong personal record.
           </p>
         </div>
 
@@ -331,7 +331,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
             className="px-4 py-2 text-xs font-bold bg-white hover:bg-slate-100 text-slate-900 rounded-lg flex items-center gap-1.5 transition-colors"
           >
             <Award className="w-4 h-4" />
-            Kumuha ng Mock Exam
+            Kumuha ng Practice Exam
           </button>
         </div>
       </div>
