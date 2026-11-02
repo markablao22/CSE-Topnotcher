@@ -457,12 +457,12 @@ export default function App() {
           <div className="flex items-center gap-2">
             <span className="font-bold text-slate-700 dark:text-slate-300">CSE Topnotcher Reviewer</span>
             <span>·</span>
-            <span>Official Civil Service Examination Simulation</span>
+            <span>Independent CSE Practice Simulation · Not affiliated with CSC</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400">
-            <span>Passing Mark: 80.00% CSC Standard</span>
+            <span>Practice target: 80.00%</span>
             <span>·</span>
-            <span>Republika ng Pilipinas</span>
+            <span>Local practice data</span>
           </div>
         </div>
       </footer>
