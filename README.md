@@ -8,20 +8,20 @@ Isang komprehensibong web application para sa paghahanda sa **Philippine Civil S
 
 ## 🌟 Mga Tampok (Key Features)
 
-### 1. 500 Curated Official Civil Service Questions
-Naglalaman ng kumpletong 500 tanong na hinati sa 5 opisyal na subtests:
-- **Kakayahang Pamilang (Numerical Ability - 100 Qs)**: Word Problems (Age, Work, Distance, Mixture, Percentages, Profit/Loss), Number Sequences, Fractions, at Data Interpretation.
-- **Kakayahang Mapanuri (Analytical Ability - 100 Qs)**: Syllogisms, Word Association, Analogy, Logical Deduction, Assumptions, at Data Sufficiency.
-- **Kakayahang Berbal (Verbal Ability - 120 Qs)**: Grammar & Correct Usage, Subject-Verb Agreement, Synonyms & Antonyms, Paragraph Organization, at Reading Comprehension.
-- **Pangkalahatang Kaalaman (General Information - 100 Qs)**: 1987 Konstitusyon ng Pilipinas (Bill of Rights, Accountability, Constitutional Commissions), Republic Act 6713 (Code of Conduct and Ethical Standards for Public Officials and Employees), Karapatang Pantao, at Environmental Management (RA 9003, Clean Air Act).
-- **Kakayahang Pang-Klerikal (Clerical Ability - 80 Qs)**: Alphabetical Indexing Rules, Filing Systems, Clerical Reasoning, Error Checking, at Spelling.
+### 1. 110 Practice Questions (Current Question Bank)
+Ang kasalukuyang repository ay may 110 practice questions. Hindi ito opisyal na CSC question bank:
+- **Kakayahang Pamilang (Numerical Ability - 50 Qs)**: Word Problems (Age, Work, Distance, Mixture, Percentages, Profit/Loss), Number Sequences, Fractions, at Data Interpretation.
+- **Kakayahang Mapanuri (Analytical Ability - 20 Qs)**: Syllogisms, Word Association, Analogy, Logical Deduction, Assumptions, at Data Sufficiency.
+- **Kakayahang Berbal (Verbal Ability - 15 Qs)**: Grammar & Correct Usage, Subject-Verb Agreement, Synonyms & Antonyms, Paragraph Organization, at Reading Comprehension.
+- **Pangkalahatang Kaalaman (General Information - 15 Qs)**: 1987 Konstitusyon ng Pilipinas (Bill of Rights, Accountability, Constitutional Commissions), Republic Act 6713 (Code of Conduct and Ethical Standards for Public Officials and Employees), Karapatang Pantao, at Environmental Management (RA 9003, Clean Air Act).
+- **Kakayahang Pang-Klerikal (Clerical Ability - 10 Qs)**: Alphabetical Indexing Rules, Filing Systems, Clerical Reasoning, Error Checking, at Spelling.
 
-### 2. Opisyal na 'Simulated Exam' Feature (CSC Blueprint)
-- **Professional Level**: Eksaktong 170 items sa loob ng 3 oras at 10 minuto (190 mins).
-- **Sub-Professional Level**: Eksaktong 165 items sa loob ng 2 oras at 40 minuto (160 mins).
+### 2. Configurable Practice Exam Simulation
+- **Professional Level target**: 170 items / 190 minutes; actual questions are limited by the current question bank.
+- **Sub-Professional Level target**: 165 items / 160 minutes; actual questions are limited by the current question bank.
 - **Interactive Scantron OMR Sheet**: Maaaring mag-shade ng bilog (A, B, C, D) katulad ng sa aktuwal na pagsusulit.
 - **Proctor Countdown Clock**: May awtomatikong audio bell at babala sa natitirang 30 mins, 15 mins, at 5 mins.
-- **Opisyal na Report of Rating**: Awtomatikong bumubuo ng opisyal na pagsusuri ng marka batay sa **80.00% passing threshold** ng CSC.
+- **Practice Score Report**: Awtomatikong bumubuo ng practice score report gamit ang 80% practice target; hindi ito CSC rating o eligibility determination.
 
 ### 3. Awtomatikong Scoring at Detalyadong Paliwanag
 - May breakdown ng marka bawat subseksyon na may kasamang CSC standard weights.
@@ -34,8 +34,8 @@ Naglalaman ng kumpletong 500 tanong na hinati sa 5 opisyal na subtests:
 - Awtomatikong iniipon ang bawat tanong na iyong naipagkamali.
 - May interactive flashcard mode na may *"Kabisado Ko Na (Mastered)"* button.
 
-### 5. Pambansa at Rehiyonal na Leaderboard
-- Top 3 Podium (Gold, Silver, Bronze) at pagraranggo sa 17 rehiyon ng Pilipinas (NCR, CALABARZON, Central Luzon, Visayas, Mindanao, atbp.).
+### 5. Local Browser Leaderboard
+- Top 3 podium at regional filters para sa mga score na naka-save sa browser na ito; hindi ito live national ranking.
 - Nako-customize na profile ng Examinee (Pangalan, Rehiyon, Antas, at Avatar).
 
 ### 6. Daily Streak Counter
