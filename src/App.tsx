@@ -40,7 +40,8 @@ import {
   saveUserProfile, 
   saveExamResult, 
   loadLeaderboard,
-  loadExamHistory
+  loadExamHistory,
+  toggleQuestionBookmark
 } from './utils/storage';
 import { sound } from './utils/sound';
 
@@ -134,7 +135,10 @@ export default function App() {
 
   // Simulated Exam Finished
   const handleFinishSimulatedExam = (result: ExamResult) => {
-    saveExamResult(result);
+    const incorrectIds = activeExamQuestions
+      .filter(question => result.userAnswers[question.id] !== question.correctAnswer)
+      .map(question => question.id);
+    saveExamResult(result, incorrectIds);
     setLastExamResult(result);
     setUserProfile(loadUserProfile());
     setLeaderboardList(loadLeaderboard());
@@ -202,7 +206,10 @@ export default function App() {
 
   // Standard Exam Finished
   const handleFinishExam = (result: ExamResult) => {
-    saveExamResult(result);
+    const incorrectIds = activeExamQuestions
+      .filter(question => result.userAnswers[question.id] !== question.correctAnswer)
+      .map(question => question.id);
+    saveExamResult(result, incorrectIds);
     setLastExamResult(result);
     setUserProfile(loadUserProfile());
     setLeaderboardList(loadLeaderboard());
@@ -212,8 +219,8 @@ export default function App() {
   };
 
   const handleToggleBookmark = (id: string) => {
-    const updated = loadUserProfile();
-    setUserProfile(updated);
+    toggleQuestionBookmark(id);
+    setUserProfile(loadUserProfile());
   };
 
   const handleClearFromMistakes = (id: string) => {
