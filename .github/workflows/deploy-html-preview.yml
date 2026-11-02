@@ -1,0 +1,38 @@
+name: Deploy standalone HTML preview
+
+on:
+  push:
+    branches:
+      - html/standalone-reviewer-main
+    paths:
+      - "html/**"
+      - ".github/workflows/deploy-html-preview.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-preview"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload HTML site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: html
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
