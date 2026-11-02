@@ -233,14 +233,14 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
               >
                 <div>
                   <span className="font-bold text-sm text-slate-900 dark:text-white">
-                    Diagnostic Sprint (50 Items)
+                    Diagnostic Sprint (up to 50 Items)
                   </span>
                   <p className="text-xs text-slate-500 mt-1">
-                    50 items sa loob ng 60 minuto. May balanseng representasyon ng bawat subseksyon.
+                    Hanggang 50 items sa loob ng 60 minuto; maaaring mas kaunti depende sa available questions sa napiling level.
                   </p>
                 </div>
                 <span className="font-bold text-xs text-slate-600 dark:text-slate-300 whitespace-nowrap">
-                  50 Qs
+                  {totalQuestions} Qs
                 </span>
               </button>
             </div>
