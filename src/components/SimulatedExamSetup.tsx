@@ -63,13 +63,13 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
           <div className="flex-1">
             <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 mb-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
-              Republika ng Pilipinas · Komisyon sa Serbisyo Sibil
+              Independent CSE reviewer · Hindi kaanib sa CSC
             </div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               Practice Simulation ng Career Service Examination
             </h1>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
-              Naglalaman ng parehong bilang ng mga tanong, opisyal na takdang oras, OMR Answer Sheet shading simulation, at awtomatikong pagsusuri ng marka batay sa 80.00% passing threshold ng Civil Service Commission.
+              Nagbibigay ng practice questions, timer at OMR-style answer sheet simulation. Ang bilang ng tanong, oras at 80% practice target ay configuration ng app at hindi opisyal na CSC exam materials.
             </p>
           </div>
 
@@ -178,14 +178,14 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-sm text-slate-900 dark:text-white">
-                      Aktwal na CSC Full Examination
+                      Full-Length Practice Simulation
                     </span>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-amber-500 text-white uppercase tracking-wider">
-                      Opisyal
+                      Practice
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 mt-1">
-                    Buong {level === 'professional' ? '170 items (3 oras 10 minuto)' : '165 items (2 oras 40 minuto)'} na may eksaktong CSC subtest distribution.
+                    Full-length practice set gamit ang distribution na naka-configure sa app.
                   </p>
                 </div>
                 <span className="font-extrabold text-sm text-amber-700 dark:text-amber-300 whitespace-nowrap">
@@ -244,7 +244,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
           {/* Subtest Distribution Table Preview */}
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs">
             <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-3">
-              Struktura ng Pagsusulit Ayon sa CSC Blueprint:
+              Practice section distribution (app configuration):
             </h3>
 
             <div className="space-y-2.5">
@@ -284,12 +284,12 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs">
             <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm mb-3">
               <AlertTriangle className="w-4 h-4" />
-              <span>Opisyal na Alituntunin sa Pagsusulit</span>
+              <span>Practice exam settings</span>
             </div>
 
             <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-2.5 list-disc list-inside leading-relaxed">
               <li>
-                <strong>Passing Mark:</strong> Kinakailangang makakuha ng hindi bababa sa <strong>80.00% general rating</strong> upang maging Civil Service Eligible.
+                <strong>Passing Mark:</strong> Ang <strong>80.00%</strong> ay practice target lamang; hindi nito iginagawad o pinatutunayan ang Civil Service Eligibility.
               </li>
               <li>
                 <strong>Countdown Timer:</strong> Mahigpit na ipinapatupad ang takdang oras na <strong>{timeFormatted}</strong>. Awtomatikong magsusumite ang test kapag natapos ang oras.
@@ -301,7 +301,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
                 <strong>OMR Answer Sheet Shading:</strong> Tiyaking ma-shade ang bawat aytem. Walang bawas sa maling sagot (*no negative marking*), kaya sagutan ang lahat.
               </li>
               <li>
-                <strong>Detalyadong Ulat at Paliwanag:</strong> Matapos ang pagsusulit, makikita mo ang opisyal na <em>Report of Rating</em> at step-by-step na paliwanag sa bawat tanong.
+                <strong>Detalyadong Ulat at Paliwanag:</strong> Matapos ang pagsusulit, makikita mo ang practice score report at step-by-step na paliwanag sa bawat tanong.
               </li>
             </ul>
 
@@ -335,7 +335,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
               <span>Simulated Exam Mode Active</span>
             </div>
             <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-[11px]">
-              Ang markang makukuha mo rito ay maihahalintulad sa magiging resulta mo sa mismong araw ng Civil Service Examination.
+              Practice estimate lamang ito. Maaaring magkaiba ang aktuwal na exam format, content at scoring.
             </p>
           </div>
 
