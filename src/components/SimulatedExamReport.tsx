@@ -100,7 +100,7 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       
-      {/* Official CSC Certificate & Report of Rating Card */}
+      {/* Practice Exam Report Card */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl border-2 border-slate-300 dark:border-slate-700 shadow-xl p-6 sm:p-10 relative overflow-hidden">
         
         {/* Subtle Watermark Seal */}
@@ -124,10 +124,10 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
             />
           </div>
           <span className="text-[11px] font-bold tracking-widest text-slate-500 uppercase block">
-            Republika ng Pilipinas · Komisyon sa Serbisyo Sibil
+            Independent CSE practice reviewer · Not affiliated with the CSC
           </span>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
-            Report of Rating — Career Service Examination
+            Practice Exam Report — Career Service Examination
           </h1>
           <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
             {result.examLevel === 'professional' ? 'Professional Level Examination' : 'Sub-Professional Level Examination'}
@@ -163,17 +163,17 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 bg-slate-900 text-white dark:bg-white dark:text-slate-950">
               <Award className="w-3.5 h-3.5 text-amber-400" />
-              Opisyal na Hatol (Official Verdict)
+              Resulta ng Practice Exam
             </div>
             <h2 className={`text-2xl sm:text-3xl font-black tracking-tight ${
               result.passed ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-900 dark:text-white'
             }`}>
-              {result.passed ? 'PASSED — CIVIL SERVICE ELIGIBLE' : 'FAILED — DID NOT MEET 80% REQUIREMENT'}
+              {result.passed ? 'PASSED — PRACTICE SCORE' : 'BELOW TARGET — KEEP PRACTICING'}
             </h2>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-lg">
               {result.passed
-                ? 'Binabati ka ng Komisyon sa Serbisyo Sibil! Ang markang ito ay nagpapatunay ng iyong kahusayan at kakayahang maglingkod sa pamahalaan.'
-                : 'Nakuha mo ang pangkalahatang marka na nasa ilalim ng 80.00% passing rate. Gamitin ang detalyadong pagsusuri sa ibaba upang ituon ang pag-aaral sa mga maling aytem.'}
+                ? 'Naabot mo ang target score sa practice exam na ito. Hindi ito opisyal na Civil Service Commission rating o patunay ng eligibility.'
+                : 'Nasa ibaba ng practice target ang score mo. Gamitin ang detalyadong pagsusuri upang ituon ang pag-aaral sa mga maling aytem.'}
             </p>
           </div>
 
@@ -194,7 +194,7 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
                 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' 
                 : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
             }`}>
-              CSC Passing Cut-off: 80.00%
+              Practice target: 80.00% (configurable)
             </div>
           </div>
         </div>
@@ -203,7 +203,7 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
         <div className="space-y-3">
           <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
             <BarChart3 className="w-4 h-4 text-amber-500" />
-            Ulat ng Iskor Bawat Subseksyon (Subtest Ratings Breakdown)
+            Practice score breakdown by section
           </h3>
 
           <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
@@ -214,7 +214,7 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
                   <th className="py-3 px-4 text-center">Kabuuang Aytem</th>
                   <th className="py-3 px-4 text-center">Tamang Sagot</th>
                   <th className="py-3 px-4 text-center">Rating (%)</th>
-                  <th className="py-3 px-4 text-center">CSC Weight</th>
+                  <th className="py-3 px-4 text-center">Section weight (reference)</th>
                   <th className="py-3 px-4 text-center">Katayuan</th>
                 </tr>
               </thead>
@@ -272,7 +272,7 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
                 className="px-5 py-2.5 text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 dark:text-slate-950 rounded-xl shadow-sm transition-all flex items-center gap-2"
               >
                 <Trophy className="w-4 h-4" />
-                Itala ang Iskor sa Pambansang Leaderboard
+                Itala sa local leaderboard
               </button>
             ) : (
               <div className="px-3.5 py-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 font-bold text-xs flex items-center gap-2 border border-emerald-300 dark:border-emerald-800">
@@ -524,7 +524,7 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
                       <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/60 space-y-2.5">
                         <div className="flex items-center gap-2 font-bold text-xs text-amber-900 dark:text-amber-200">
                           <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                          <span>Opisyal na Paliwanag at Batayang Legal / Matematikal</span>
+                          <span>Paliwanag at Batayang Legal / Matematikal</span>
                         </div>
 
                         <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed">
