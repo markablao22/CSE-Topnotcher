@@ -266,7 +266,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
       passed,
       timeSpentSeconds: finalElapsedTotalSeconds,
       subsectionScores,
-      userAnswers,
+      userAnswers: finalUserAnswers,
       questionIds: questions.map(q => q.id),
       xpEarned
     };
