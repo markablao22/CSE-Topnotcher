@@ -69,11 +69,8 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
   // Overall Timer effect
   useEffect(() => {
     timerRef.current = setInterval(() => {
-      setElapsedTotalSeconds(prev => {
-        const next = prev + 1;
-        elapsedTotalSecondsRef.current = next;
-        return next;
-      });
+      elapsedTotalSecondsRef.current += 1;
+      setElapsedTotalSeconds(elapsedTotalSecondsRef.current);
 
       setSecondsRemaining(prev => {
         if (mode === 'speed_challenge') {
@@ -91,7 +88,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
           // Mock / Drill countdown
           if (prev <= 1) {
             clearInterval(timerRef.current!);
-            handleFinalSubmit();
+            setTimeout(handleFinalSubmit, 0);
             return 0;
           }
           return prev - 1;
@@ -128,11 +125,9 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
     const isCorrect = optionIndex === currentQuestion.correctAnswer;
     sound.playTap();
 
-    setUserAnswers(prev => {
-      const next = { ...prev, [currentQuestion.id]: optionIndex };
-      userAnswersRef.current = next;
-      return next;
-    });
+    const nextAnswers = { ...userAnswersRef.current, [currentQuestion.id]: optionIndex };
+    userAnswersRef.current = nextAnswers;
+    setUserAnswers(nextAnswers);
 
     if (isCorrect) {
       markAsMastered(currentQuestion.id);
