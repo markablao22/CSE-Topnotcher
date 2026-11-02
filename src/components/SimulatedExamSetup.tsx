@@ -23,27 +23,33 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
   const [preset, setPreset] = useState<'official_full' | 'half_length' | 'diagnostic_50'>('official_full');
 
   const blueprint = OFFICIAL_CSC_BLUEPRINT[level];
-  const getPresetCategoryCount = (item: typeof blueprint.categoryBreakdown[number]) => {
+  const getPresetCategoryCount = (
+    item: typeof blueprint.categoryBreakdown[number],
+    selectedPreset: 'official_full' | 'half_length' | 'diagnostic_50' = preset
+  ) => {
     const available = SUBSECTIONS_META[item.category]?.totalAvailable ?? 0;
-    const target = preset === 'official_full'
+    const target = selectedPreset === 'official_full'
       ? item.count
-      : preset === 'half_length'
+      : selectedPreset === 'half_length'
       ? Math.max(Math.round(item.count / 2), 5)
       : Math.max(Math.round(item.count * (50 / blueprint.totalQuestions)), 5);
     return Math.min(available, target);
   };
 
+  const getPresetTotalQuestions = (selectedPreset: 'official_full' | 'half_length' | 'diagnostic_50') =>
+    blueprint.categoryBreakdown.reduce((sum, item) => sum + getPresetCategoryCount(item, selectedPreset), 0);
+
+  const getPresetTimeLimit = (selectedPreset: 'official_full' | 'half_length' | 'diagnostic_50') =>
+    selectedPreset === 'diagnostic_50'
+      ? 60
+      : Math.max(1, Math.round(blueprint.timeLimitMinutes * (getPresetTotalQuestions(selectedPreset) / blueprint.totalQuestions)));
+
   // Simulated Examinee ID & Testing Room
   const examineeNumber = `2026-${level === 'professional' ? 'PROF' : 'SUBP'}-${Math.abs(userProfile.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 1000) * 7 % 90000 + 10000)}`;
   const roomAssignment = `Room 204 · Bulwagang Rizal, Testing Center #07`;
 
-  const totalQuestions = blueprint.categoryBreakdown.reduce(
-    (sum, item) => sum + getPresetCategoryCount(item), 0
-  );
-
-  const timeLimit = preset === 'diagnostic_50'
-    ? 60
-    : Math.max(1, Math.round(blueprint.timeLimitMinutes * (totalQuestions / blueprint.totalQuestions)));
+  const totalQuestions = getPresetTotalQuestions(preset);
+  const timeLimit = getPresetTimeLimit(preset);
 
   const hours = Math.floor(timeLimit / 60);
   const minutes = timeLimit % 60;
@@ -194,7 +200,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
                   </p>
                 </div>
                 <span className="font-extrabold text-sm text-amber-700 dark:text-amber-300 whitespace-nowrap">
-                  {blueprint.totalQuestions} Qs
+                  {getPresetTotalQuestions('official_full')} Qs
                 </span>
               </button>
 
@@ -213,11 +219,11 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
                     Half-Length Simulation (Speed Calibration)
                   </span>
                   <p className="text-xs text-slate-500 mt-1">
-                    {Math.round(blueprint.totalQuestions / 2)} items sa loob ng {Math.round(blueprint.timeLimitMinutes / 2)} minuto. Tamang-tama kung nais mo ng mabilisang simulasyon.
+                    {getPresetTotalQuestions('half_length')} items sa loob ng {getPresetTimeLimit('half_length')} minuto. Tamang-tama kung nais mo ng mabilisang simulasyon.
                   </p>
                 </div>
                 <span className="font-bold text-xs text-slate-600 dark:text-slate-300 whitespace-nowrap">
-                  {Math.round(blueprint.totalQuestions / 2)} Qs
+                  {getPresetTotalQuestions('half_length')} Qs
                 </span>
               </button>
 
@@ -240,7 +246,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
                   </p>
                 </div>
                 <span className="font-bold text-xs text-slate-600 dark:text-slate-300 whitespace-nowrap">
-                  {totalQuestions} Qs
+                  {getPresetTotalQuestions('diagnostic_50')} Qs
                 </span>
               </button>
             </div>
