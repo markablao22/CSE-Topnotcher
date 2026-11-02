@@ -32,6 +32,9 @@ export const SimulatedExamEngine: React.FC<SimulatedExamEngineProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, number>>({});
+  const userAnswersRef = useRef<Record<string, number>>({});
+  const elapsedSecondsRef = useRef(0);
+  const submittedRef = useRef(false);
   const [flaggedIndices, setFlaggedIndices] = useState<Set<number>>(new Set());
   const [showScantronDrawer, setShowScantronDrawer] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -97,7 +100,11 @@ export const SimulatedExamEngine: React.FC<SimulatedExamEngineProps> = ({
   // Timer loop with official proctor announcements
   useEffect(() => {
     timerRef.current = setInterval(() => {
-      setElapsedSeconds(prev => prev + 1);
+      setElapsedSeconds(prev => {
+        const next = prev + 1;
+        elapsedSecondsRef.current = next;
+        return next;
+      });
 
       setSecondsRemaining(prev => {
         // Proctor announcements at specific intervals
@@ -136,10 +143,11 @@ export const SimulatedExamEngine: React.FC<SimulatedExamEngineProps> = ({
     if (!currentQuestion) return;
     sound.playTap();
 
-    setUserAnswers(prev => ({
-      ...prev,
-      [currentQuestion.id]: optionIndex
-    }));
+    setUserAnswers(prev => {
+      const next = { ...prev, [currentQuestion.id]: optionIndex };
+      userAnswersRef.current = next;
+      return next;
+    });
   };
 
   const toggleFlag = () => {
@@ -170,14 +178,18 @@ export const SimulatedExamEngine: React.FC<SimulatedExamEngineProps> = ({
   };
 
   const handleFinalSubmit = () => {
+    if (submittedRef.current) return;
+    submittedRef.current = true;
     if (timerRef.current) clearInterval(timerRef.current);
+    const finalUserAnswers = userAnswersRef.current;
+    const finalElapsedSeconds = elapsedSecondsRef.current;
 
     // Compute automatic subsection scoring
     const subsectionScores: Record<string, SubsectionScore> = {};
     let totalCorrect = 0;
 
     questions.forEach(q => {
-      const chosen = userAnswers[q.id];
+      const chosen = finalUserAnswers[q.id];
       const isRight = chosen === q.correctAnswer;
       if (isRight) {
         totalCorrect += 1;
@@ -224,7 +236,7 @@ export const SimulatedExamEngine: React.FC<SimulatedExamEngineProps> = ({
       totalCorrect,
       overallPercentage: overallPct,
       passed,
-      timeSpentSeconds: elapsedSeconds,
+      timeSpentSeconds: finalElapsedSeconds,
       subsectionScores,
       userAnswers,
       questionIds: questions.map(q => q.id),
