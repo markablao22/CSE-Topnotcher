@@ -1,0 +1,6 @@
+{
+  "name": "CSE Topnotcher - Civil Service Exam Reviewer",
+  "description": "Comprehensive Philippine Civil Service Exam (CSE) Reviewer na may 500 questions, timed mock tests, subsection scoring, detalyadong paliwanag sa bawat sagot, at competitive leaderboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
