@@ -184,6 +184,10 @@ export function generateSimulatedExam(
     selectedQuestions.push(...pool.slice(0, targetCount));
   });
 
+  if (preset !== 'diagnostic_50') {
+    timeMinutes = Math.max(1, Math.round(blueprint.timeLimitMinutes * (selectedQuestions.length / blueprint.totalQuestions)));
+  }
+
   return {
     questions: selectedQuestions,
     timeMinutes,
