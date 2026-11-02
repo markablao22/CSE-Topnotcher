@@ -117,6 +117,13 @@ export function generateMockExam(level: ExamLevel, count: number = 50): Question
     selected.push(...catPool.slice(0, takeCount));
   });
 
+  // Refill any shortfall from categories whose pools had fewer questions than their quota.
+  if (selected.length < count) {
+    const selectedIds = new Set(selected.map(question => question.id));
+    const remainingQuestions = shuffleArray(eligibleQuestions.filter(question => !selectedIds.has(question.id)));
+    selected.push(...remainingQuestions.slice(0, count - selected.length));
+  }
+
   return shuffleArray(selected);
 }
 
