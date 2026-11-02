@@ -66,7 +66,7 @@ export const SimulatedExamSetup: React.FC<SimulatedExamSetupProps> = ({
               Republika ng Pilipinas · Komisyon sa Serbisyo Sibil
             </div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Opisyal na Simulasyon ng Career Service Examination
+              Practice Simulation ng Career Service Examination
             </h1>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
               Naglalaman ng parehong bilang ng mga tanong, opisyal na takdang oras, OMR Answer Sheet shading simulation, at awtomatikong pagsusuri ng marka batay sa 80.00% passing threshold ng Civil Service Commission.
