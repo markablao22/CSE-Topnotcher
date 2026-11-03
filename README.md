@@ -8,13 +8,13 @@ Isang komprehensibong web application para sa paghahanda sa **Philippine Civil S
 
 ## 🌟 Mga Tampok (Key Features)
 
-### 1. 500 Curated Official Civil Service Questions
-Naglalaman ng kumpletong 500 tanong na hinati sa 5 opisyal na subtests:
-- **Kakayahang Pamilang (Numerical Ability - 100 Qs)**: Word Problems (Age, Work, Distance, Mixture, Percentages, Profit/Loss), Number Sequences, Fractions, at Data Interpretation.
-- **Kakayahang Mapanuri (Analytical Ability - 100 Qs)**: Syllogisms, Word Association, Analogy, Logical Deduction, Assumptions, at Data Sufficiency.
-- **Kakayahang Berbal (Verbal Ability - 120 Qs)**: Grammar & Correct Usage, Subject-Verb Agreement, Synonyms & Antonyms, Paragraph Organization, at Reading Comprehension.
-- **Pangkalahatang Kaalaman (General Information - 100 Qs)**: 1987 Konstitusyon ng Pilipinas (Bill of Rights, Accountability, Constitutional Commissions), Republic Act 6713 (Code of Conduct and Ethical Standards for Public Officials and Employees), Karapatang Pantao, at Environmental Management (RA 9003, Clean Air Act).
-- **Kakayahang Pang-Klerikal (Clerical Ability - 80 Qs)**: Alphabetical Indexing Rules, Filing Systems, Clerical Reasoning, Error Checking, at Spelling.
+### 1. Libreng Sample Questions at Premium Question Bank
+May 65 libreng sample questions na hinati sa 5 opisyal na subtests. Ang dagdag na Premium questions ay nasa pribadong Firestore collection at hindi kasama sa public source files:
+- **Kakayahang Pamilang (Numerical Ability - 13 Qs)**: Word Problems (Age, Work, Distance, Mixture, Percentages, Profit/Loss), Number Sequences, Fractions, at Data Interpretation.
+- **Kakayahang Mapanuri (Analytical Ability - 13 Qs)**: Syllogisms, Word Association, Analogy, Logical Deduction, Assumptions, at Data Sufficiency.
+- **Kakayahang Berbal (Verbal Ability - 13 Qs)**: Grammar & Correct Usage, Subject-Verb Agreement, Synonyms & Antonyms, Paragraph Organization, at Reading Comprehension.
+- **Pangkalahatang Kaalaman (General Information - 13 Qs)**: 1987 Konstitusyon ng Pilipinas (Bill of Rights, Accountability, Constitutional Commissions), Republic Act 6713 (Code of Conduct and Ethical Standards for Public Officials and Employees), Karapatang Pantao, at Environmental Management (RA 9003, Clean Air Act).
+- **Kakayahang Pang-Klerikal (Clerical Ability - 13 Qs)**: Alphabetical Indexing Rules, Filing Systems, Clerical Reasoning, Error Checking, at Spelling.
 
 ### 2. Opisyal na 'Simulated Exam' Feature (CSC Blueprint)
 - **Professional Level**: Eksaktong 170 items sa loob ng 3 oras at 10 minuto (190 mins).
@@ -98,4 +98,6 @@ Payment approvals write a `premium: true` entitlement to the user's Firestore re
 ## 📜 Lisensya
 Apache-2.0 License.
 Inihanda para sa mga Pilipinong kukuha ng Civil Service Examination. Mabuhay ang Kawani ng Gobyerno!
+
+
 
