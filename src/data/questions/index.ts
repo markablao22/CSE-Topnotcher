@@ -1,17 +1,17 @@
-import { Question, SubtestCategory, ExamLevel } from '../../types/quiz';
-import { numericalQuestions } from './numerical';
-import { analyticalQuestions } from './analytical';
-import { verbalQuestions } from './verbal';
-import { generalInfoQuestions } from './general_info';
-import { clericalQuestions } from './clerical';
+import type { Question, SubtestCategory, ExamLevel } from '../../types/quiz';
+import { freeQuestions } from './free';
 
-export const ALL_QUESTIONS: Question[] = [
-  ...numericalQuestions,
-  ...analyticalQuestions,
-  ...verbalQuestions,
-  ...generalInfoQuestions,
-  ...clericalQuestions
-];
+export const FREE_QUESTIONS: Question[] = [...freeQuestions];
+export let ALL_QUESTIONS: Question[] = [...FREE_QUESTIONS];
+
+export function replacePremiumQuestions(questions: Question[] = []) {
+  const unique = new Map(FREE_QUESTIONS.map((question) => [question.id, question]));
+  questions.forEach((question) => unique.set(question.id, question));
+  ALL_QUESTIONS = [...unique.values()];
+  (Object.keys(SUBSECTIONS_META) as SubtestCategory[]).forEach((category) => {
+    SUBSECTIONS_META[category].totalAvailable = ALL_QUESTIONS.filter((question) => question.category === category).length;
+  });
+}
 
 export interface SubsectionMeta {
   id: SubtestCategory;
@@ -31,7 +31,7 @@ export const SUBSECTIONS_META: Record<SubtestCategory, SubsectionMeta> = {
     description: 'Basic Operations, Word Problems, Number Sequences, Ratio, Percentage, Fractions, at Data Interpretation.',
     cscWeightProf: '25%',
     cscWeightSubProf: '25%',
-    totalAvailable: numericalQuestions.length
+    totalAvailable: FREE_QUESTIONS.filter((q) => q.category === 'numerical').length
   },
   analytical: {
     id: 'analytical',
@@ -40,7 +40,7 @@ export const SUBSECTIONS_META: Record<SubtestCategory, SubsectionMeta> = {
     description: 'Syllogism, Word Association, Analogy, Logical Deduction, Assumptions, at Data Sufficiency (Professional only).',
     cscWeightProf: '25%',
     cscWeightSubProf: '0%',
-    totalAvailable: analyticalQuestions.length
+    totalAvailable: FREE_QUESTIONS.filter((q) => q.category === 'analytical').length
   },
   verbal: {
     id: 'verbal',
@@ -49,7 +49,7 @@ export const SUBSECTIONS_META: Record<SubtestCategory, SubsectionMeta> = {
     description: 'Grammar and Correct Usage, Vocabulary, Synonyms/Antonyms, Paragraph Organization, at Reading Comprehension.',
     cscWeightProf: '30%',
     cscWeightSubProf: '30%',
-    totalAvailable: verbalQuestions.length
+    totalAvailable: FREE_QUESTIONS.filter((q) => q.category === 'verbal').length
   },
   general_info: {
     id: 'general_info',
@@ -58,7 +58,7 @@ export const SUBSECTIONS_META: Record<SubtestCategory, SubsectionMeta> = {
     description: '1987 Philippine Constitution, RA 6713 Code of Conduct, Peace and Human Rights, at Environmental Management.',
     cscWeightProf: '20%',
     cscWeightSubProf: '20%',
-    totalAvailable: generalInfoQuestions.length
+    totalAvailable: FREE_QUESTIONS.filter((q) => q.category === 'general_info').length
   },
   clerical: {
     id: 'clerical',
@@ -67,7 +67,7 @@ export const SUBSECTIONS_META: Record<SubtestCategory, SubsectionMeta> = {
     description: 'Alphabetical Indexing, Filing Systems, Clerical Reasoning, Error Checking, at Spelling (Sub-Professional only).',
     cscWeightProf: '0%',
     cscWeightSubProf: '25%',
-    totalAvailable: clericalQuestions.length
+    totalAvailable: FREE_QUESTIONS.filter((q) => q.category === 'clerical').length
   }
 };
 
@@ -190,3 +190,4 @@ export function generateSimulatedExam(
     blueprint
   };
 }
+
