@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
 import { Navbar } from './components/Navbar';
 import { HomeView } from './components/HomeView';
 import { ExamEngine } from './components/ExamEngine';
@@ -18,10 +19,12 @@ import { SimulatedExamReport } from './components/SimulatedExamReport';
 import { RoadmapView } from './components/RoadmapView';
 import { PremiumAccess } from './components/PremiumAccess';
 import { usePremiumStatus } from './lib/usePremiumStatus';
+import { db } from './lib/firebase';
 import { PremiumGateProvider } from './components/PremiumGate';
 
 import { 
   ALL_QUESTIONS, 
+  replacePremiumQuestions,
   generateMockExam, 
   generateSimulatedExam,
   getQuestionsByCategory, 
@@ -53,6 +56,7 @@ export default function App() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isPremiumOpen, setIsPremiumOpen] = useState(false);
   const hasPremium = usePremiumStatus();
+  const [premiumQuestionsReady, setPremiumQuestionsReady] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -72,6 +76,32 @@ export default function App() {
 
   // Exam history for diagnostic scoring and roadmap
   const [examHistory, setExamHistory] = useState<ExamResult[]>(loadExamHistory());
+
+  useEffect(() => {
+    let active = true;
+    setPremiumQuestionsReady(false);
+    if (!hasPremium || !db) {
+      replacePremiumQuestions();
+      setPremiumQuestionsReady(true);
+      return () => { active = false; };
+    }
+    getDocs(collection(db, 'premiumQuestions'))
+      .then((snapshot) => {
+        if (!active) return;
+        const questions = snapshot.docs.map((item) => ({ ...item.data(), id: item.id } as Question));
+        replacePremiumQuestions(questions);
+        setPremiumQuestionsReady(true);
+      })
+      .catch((error) => {
+        console.error('Hindi makuha ang Premium questions:', error);
+        if (active) {
+          replacePremiumQuestions();
+          setPremiumQuestionsReady(true);
+          setIsPremiumOpen(true);
+        }
+      });
+    return () => { active = false; };
+  }, [hasPremium]);
 
   // Initialize theme & sound from storage/system
   useEffect(() => {
@@ -128,6 +158,7 @@ export default function App() {
     level: ExamLevel,
     preset: 'official_full' | 'half_length' | 'diagnostic_50'
   ) => {
+    if (hasPremium && !premiumQuestionsReady) return;
     if (!hasPremium && preset !== 'diagnostic_50') {
       setIsPremiumOpen(true);
       return;
@@ -154,6 +185,7 @@ export default function App() {
 
   // Launch Standard Mock Exam
   const handleStartMockExam = (level: ExamLevel, count: number = 50) => {
+    if (hasPremium && !premiumQuestionsReady) return;
     if (!hasPremium && count > 50) {
       setIsPremiumOpen(true);
       return;
@@ -173,6 +205,7 @@ export default function App() {
 
   // Launch Subsection Drill
   const handleStartDrill = (category: SubtestCategory, instantFeedback: boolean) => {
+    if (hasPremium && !premiumQuestionsReady) return;
     sound.playTap();
     const pool = getQuestionsByCategory(category);
     const questions = shuffleArray(pool).slice(0, 20);
@@ -489,3 +522,4 @@ export default function App() {
     </PremiumGateProvider>
   );
 }
+
