@@ -52,7 +52,7 @@ export const QuestionBankExplorer: React.FC<QuestionBankExplorerProps> = ({
           </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Aklatan ng 500 Civil Service Questions
+              Question Bank
             </h1>
             <p className="text-xs text-slate-600 dark:text-slate-400">
               Galugarin ang bawat tanong, subseksyon, step-by-step formula, at opisyal na paliwanag
@@ -88,7 +88,7 @@ export const QuestionBankExplorer: React.FC<QuestionBankExplorerProps> = ({
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              Lahat (500)
+              Lahat ({questions.length})
             </button>
             {Object.keys(SUBSECTIONS_META).map(key => {
               const meta = SUBSECTIONS_META[key as SubtestCategory];
@@ -129,7 +129,7 @@ export const QuestionBankExplorer: React.FC<QuestionBankExplorerProps> = ({
 
       {/* Showing count indicator */}
       <div className="text-xs text-slate-500 mb-4 px-1">
-        Ipinapakita ang <strong className="text-slate-900 dark:text-white tabular-nums">{filtered.length}</strong> sa 500 tanong
+        Ipinapakita ang <strong className="text-slate-900 dark:text-white tabular-nums">{filtered.length}</strong> sa {questions.length} tanong na available sa account mo
       </div>
 
       {/* Questions Accordion List */}
@@ -267,3 +267,4 @@ export const QuestionBankExplorer: React.FC<QuestionBankExplorerProps> = ({
     </div>
   );
 };
+
