@@ -5,28 +5,30 @@ import { adminEmail, auth, db } from './firebase';
 
 export function usePremiumStatus() {
   const [isPremium, setIsPremium] = useState(false);
+  const firebaseAuth = auth;
+  const firestore = db;
 
   useEffect(() => {
-    if (!auth || !db) {
+    if (!firebaseAuth || !firestore) {
       setIsPremium(false);
       return;
     }
 
     let stopEntitlement = () => {};
-    const stopAuth = onAuthStateChanged(auth, (user) => {
+    const stopAuth = onAuthStateChanged(firebaseAuth, (user) => {
       stopEntitlement();
       setIsPremium(false);
       if (!user) return;
 
       void (async () => {
         const token = await user.getIdTokenResult(true);
-        if (auth.currentUser?.uid !== user.uid) return;
+        if (firebaseAuth.currentUser?.uid !== user.uid) return;
         const isAdmin = token.claims.admin === true || (user.email?.toLowerCase() === adminEmail && user.emailVerified);
         if (isAdmin) {
           setIsPremium(true);
           return;
         }
-        stopEntitlement = onSnapshot(doc(db, 'users', user.uid), (snapshot) => {
+        stopEntitlement = onSnapshot(doc(firestore, 'users', user.uid), (snapshot) => {
           setIsPremium(snapshot.data()?.premium === true);
         }, () => setIsPremium(false));
       })().catch(() => setIsPremium(false));
@@ -40,3 +42,4 @@ export function usePremiumStatus() {
 
   return isPremium;
 }
+
