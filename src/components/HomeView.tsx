@@ -71,14 +71,14 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-slate-300 leading-relaxed">
-            Maghanda gamit ang <strong>500 curated questions</strong> na may opisyal na countdown timer, awtomatikong pagsusuri ng iskor bawat subseksyon, step-by-step na paliwanag sa bawat sagot, at pambansang leaderboard upang mas lalong maging masigasig sa pag-aaral.
+            Magsimula sa <strong>65 libreng sample questions</strong>. I-unlock ang mas malaking question bank at buong Civil Service mock exams gamit ang Premium.
           </p>
 
           {/* Quick Stats Pill Strip */}
           <div className="flex flex-wrap items-center gap-6 pt-6 text-xs text-slate-300">
             <div>
-              <span className="block text-xl font-black text-white tabular-nums">500</span>
-              <span className="text-slate-400">Curated Qs</span>
+              <span className="block text-xl font-black text-white tabular-nums">65</span>
+              <span className="text-slate-400">Libreng sample</span>
             </div>
             <div className="w-px h-8 bg-slate-800" />
             <div>
@@ -625,7 +625,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
           <div>
             <h3 className="font-bold text-base text-slate-900 dark:text-white">
-              Aklatan ng 500 Questions at Solusyon
+              Aklatan ng mga Tanong at Solusyon
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
               Nais mo bang basahin ang lahat ng tanong, formulas, at legal citations nang walang timer?
@@ -637,10 +637,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
           onClick={() => { sound.playTap(); onOpenQuestionBank(); }}
           className="px-5 py-2.5 text-xs font-bold rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 text-slate-900 dark:text-white transition-colors shrink-0 shadow-xs"
         >
-          Buksan ang Aklatan (500 Items) →
+          Buksan ang Aklatan →
         </button>
       </div>
 
     </div>
   );
 };
+
