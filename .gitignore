@@ -1,6 +1,9 @@
 node_modules/
 .npm-cache/
 .firebase/
+.firebase-auth-cache/
+.tmp-question-data/
+.premium-question-seed.json
 build/
 dist/
 coverage/
@@ -8,3 +11,4 @@ coverage/
 *.log
 .env*
 !.env.example
+
