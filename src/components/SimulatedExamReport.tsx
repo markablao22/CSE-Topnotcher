@@ -8,6 +8,7 @@ import { ExamResult, Question, UserProfile, SubtestCategory } from '../types/qui
 import { SUBSECTIONS_META, OFFICIAL_CSC_BLUEPRINT } from '../data/questions';
 import { sound } from '../utils/sound';
 import { addLeaderboardScore, toggleQuestionBookmark } from '../utils/storage';
+import { PremiumFeature } from './PremiumGate';
 
 interface SimulatedExamReportProps {
   result: ExamResult;
@@ -521,7 +522,7 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
                       </div>
 
                       {/* Official Explanation Box */}
-                      <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/60 space-y-2.5">
+                      <PremiumFeature><div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/60 space-y-2.5">
                         <div className="flex items-center gap-2 font-bold text-xs text-amber-900 dark:text-amber-200">
                           <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                           <span>Opisyal na Paliwanag at Batayang Legal / Matematikal</span>
@@ -556,7 +557,7 @@ export const SimulatedExamReport: React.FC<SimulatedExamReportProps> = ({
                             Bakit mali ang ibang pagpipilian: {q.explanation.whyOthersAreWrong}
                           </p>
                         )}
-                      </div>
+                      </div></PremiumFeature>
 
                     </div>
                   )}

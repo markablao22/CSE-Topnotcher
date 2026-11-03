@@ -12,6 +12,7 @@ interface NavbarProps {
   onToggleTheme: () => void;
   userProfile: UserProfile;
   onOpenProfile: () => void;
+  onOpenPremium?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -22,7 +23,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   darkMode,
   onToggleTheme,
   userProfile,
-  onOpenProfile
+  onOpenProfile,
+  onOpenPremium,
 }) => {
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800 transition-colors">
@@ -151,6 +153,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Action Zone: Audio, Theme, User Profile */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <button onClick={() => onOpenPremium?.()} className="rounded-md bg-amber-500 px-3 py-2 text-xs font-bold text-slate-950 hover:bg-amber-400">Premium ₱250</button>
             {/* Streak & XP display */}
             <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800/80 text-xs">
               <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold" title="Arawang Streak">

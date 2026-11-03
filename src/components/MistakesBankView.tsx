@@ -7,6 +7,7 @@ import { Question, SubtestCategory } from '../types/quiz';
 import { SUBSECTIONS_META } from '../data/questions';
 import { sound } from '../utils/sound';
 import { markAsMastered } from '../utils/storage';
+import { PremiumFeature } from './PremiumGate';
 
 interface MistakesBankViewProps {
   incorrectIds: string[];
@@ -151,6 +152,7 @@ export const MistakesBankView: React.FC<MistakesBankViewProps> = ({
                       </p>
                     </div>
 
+                    <PremiumFeature>
                     {q.explanation.stepByStep && (
                       <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-lg text-xs font-mono space-y-1">
                         {q.explanation.stepByStep.map((s, i) => (
@@ -164,6 +166,7 @@ export const MistakesBankView: React.FC<MistakesBankViewProps> = ({
                         📌 <strong>Tuntunin:</strong> {q.explanation.keyFormulaOrRule}
                       </div>
                     )}
+                    </PremiumFeature>
                   </div>
                 )}
               </div>

@@ -8,6 +8,7 @@ import { Question, ExamLevel, ExamResult, SubsectionScore, SubtestCategory } fro
 import { SUBSECTIONS_META } from '../data/questions';
 import { sound } from '../utils/sound';
 import { recordMistake, markAsMastered, toggleQuestionBookmark } from '../utils/storage';
+import { PremiumFeature } from './PremiumGate';
 
 interface ExamEngineProps {
   questions: Question[];
@@ -522,7 +523,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
 
         {/* Detailed Explanation Box (If Instant Feedback mode is active and answered) */}
         {instantFeedback && revealedExplanations[currentQuestion.id] && (
-          <div className="mt-6 p-5 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/30">
+          <PremiumFeature><div className="mt-6 p-5 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/30">
             <div className="flex items-center gap-2 mb-2 font-bold text-sm text-amber-900 dark:text-amber-200">
               <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <span>Detalyadong Paliwanag at Batayan</span>
@@ -559,7 +560,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
                 Bakit mali ang iba: {currentQuestion.explanation.whyOthersAreWrong}
               </p>
             )}
-          </div>
+          </div></PremiumFeature>
         )}
 
         {/* Bottom Navigation Buttons */}

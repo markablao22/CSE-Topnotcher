@@ -81,6 +81,18 @@ Buksan ang browser sa `http://localhost:3000`.
 npm run build
 ```
 
+## Premium payments (Firebase setup)
+
+The app includes a ₱250 manual GCash payment request screen and an admin review screen. A Firebase project is required before these screens can be used.
+
+1. Create a Firebase project, add a Web App, and copy its public web configuration to `.env.local` using `.env.example` as a template. Set `VITE_GCASH_ACCOUNT_NAME` and `VITE_GCASH_NUMBER` to the merchant details customers should pay.
+2. In Firebase Authentication, enable Email/Password sign-in and create the Firestore database. The current GCash flow asks buyers to submit the transaction reference; it does not upload receipt screenshots, so Firebase Storage is not required. Email verification is required before a buyer can submit a request.
+3. Install Firebase CLI, select the project with `firebase use --add`, then deploy the included Firestore security rules with `firebase deploy --only firestore:rules`.
+4. Create an Email/Password account in the app using the admin email shown in `VITE_FIREBASE_ADMIN_EMAIL`, then verify that email. The verified account is the admin in Firestore rules; if you change the email, update the matching email in `firestore.rules` too. Never put service-account credentials in this repository or a `VITE_` variable.
+5. Run the app with `npm install` then `npm run dev`.
+
+Payment approvals write a `premium: true` entitlement to the user's Firestore record. Firestore rules reserve that field for admins. The interface locks full exams and detailed explanations for free accounts, but question data is still included in the public app bundle; these client-side gates are a starter flow, not tamper-proof content protection. No payment is processed automatically; an admin must compare the reference with GCash transaction history before approval.
+
 ---
 
 ## 📜 Lisensya

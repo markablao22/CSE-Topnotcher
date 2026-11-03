@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn() && (
+        request.auth.token.admin == true
+        || (request.auth.token.email == 'markablao22@gmail.com'
+          && request.auth.token.email_verified == true)
+      );
+    }
+
+    match /paymentRequests/{requestId} {
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && request.auth.token.email_verified == true
+        && request.resource.data.amount == 250
+        && request.resource.data.reference is string
+        && request.resource.data.reference.size() > 0
+        && request.resource.data.reference.size() <= 80
+        && request.resource.data.status == 'pending'
+        && request.resource.data.keys().hasAll(['uid', 'email', 'amount', 'reference', 'status', 'createdAt'])
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'amount', 'reference', 'status', 'createdAt']);
+      allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reviewedAt', 'reviewedBy'])
+        && request.resource.data.status in ['approved', 'rejected'];
+      allow delete: if false;
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create, update: if isAdmin();
+      allow delete: if false;
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

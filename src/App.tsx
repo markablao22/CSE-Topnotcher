@@ -16,6 +16,9 @@ import { SimulatedExamSetup } from './components/SimulatedExamSetup';
 import { SimulatedExamEngine } from './components/SimulatedExamEngine';
 import { SimulatedExamReport } from './components/SimulatedExamReport';
 import { RoadmapView } from './components/RoadmapView';
+import { PremiumAccess } from './components/PremiumAccess';
+import { usePremiumStatus } from './lib/usePremiumStatus';
+import { PremiumGateProvider } from './components/PremiumGate';
 
 import { 
   ALL_QUESTIONS, 
@@ -48,6 +51,8 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState<string>('home');
   const [userProfile, setUserProfile] = useState<UserProfile>(loadUserProfile());
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isPremiumOpen, setIsPremiumOpen] = useState(false);
+  const hasPremium = usePremiumStatus();
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -123,6 +128,10 @@ export default function App() {
     level: ExamLevel,
     preset: 'official_full' | 'half_length' | 'diagnostic_50'
   ) => {
+    if (!hasPremium && preset !== 'diagnostic_50') {
+      setIsPremiumOpen(true);
+      return;
+    }
     sound.playTap();
     const sim = generateSimulatedExam(level, preset);
     setActiveExamQuestions(sim.questions);
@@ -145,6 +154,10 @@ export default function App() {
 
   // Launch Standard Mock Exam
   const handleStartMockExam = (level: ExamLevel, count: number = 50) => {
+    if (!hasPremium && count > 50) {
+      setIsPremiumOpen(true);
+      return;
+    }
     sound.playTap();
     const questions = generateMockExam(level, count);
     setActiveExamQuestions(questions);
@@ -222,6 +235,7 @@ export default function App() {
   };
 
   return (
+    <PremiumGateProvider isPremium={hasPremium} openPremium={() => setIsPremiumOpen(true)}>
     <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 flex flex-col font-sans transition-colors">
       
       {/* Top Navbar */}
@@ -246,6 +260,7 @@ export default function App() {
         onToggleTheme={handleToggleTheme}
         userProfile={userProfile}
         onOpenProfile={() => setIsProfileModalOpen(true)}
+        onOpenPremium={() => setIsPremiumOpen(true)}
       />
 
       {/* Main View Area */}
@@ -468,6 +483,9 @@ export default function App() {
         onSave={handleSaveProfile}
       />
 
+      {isPremiumOpen && <PremiumAccess onClose={() => setIsPremiumOpen(false)} />}
+
     </div>
+    </PremiumGateProvider>
   );
 }

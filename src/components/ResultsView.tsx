@@ -8,6 +8,7 @@ import { ExamResult, Question, UserProfile, SubtestCategory } from '../types/qui
 import { SUBSECTIONS_META } from '../data/questions';
 import { sound } from '../utils/sound';
 import { addLeaderboardScore, toggleQuestionBookmark } from '../utils/storage';
+import { PremiumFeature } from './PremiumGate';
 
 interface ResultsViewProps {
   result: ExamResult;
@@ -458,7 +459,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                     </div>
 
                     {/* Rich Explanation Box */}
-                    <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/60">
+                    <PremiumFeature><div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/60">
                       <div className="flex items-center gap-2 font-bold text-xs text-amber-900 dark:text-amber-200 mb-2">
                         <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                         <span>Detalyadong Paliwanag at Batayan</span>
@@ -495,7 +496,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                           Bakit mali ang iba: {q.explanation.whyOthersAreWrong}
                         </p>
                       )}
-                    </div>
+                    </div></PremiumFeature>
 
                   </div>
                 )}
