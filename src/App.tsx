@@ -164,7 +164,9 @@ export default function App() {
       return;
     }
     sound.playTap();
-    const sim = generateSimulatedExam(level, preset);
+    const sim = !hasPremium && preset === 'diagnostic_50'
+      ? { questions: generateMockExam(level, 50), timeMinutes: 60 }
+      : generateSimulatedExam(level, preset);
     setActiveExamQuestions(sim.questions);
     setActiveExamLevel(level);
     setActiveExamTimerMinutes(sim.timeMinutes);
