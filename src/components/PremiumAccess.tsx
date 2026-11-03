@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword, onAuthStateChanged, reload, sendEmailVerification, signInWithEmailAndPassword, signOut, User } from 'firebase/auth';
-import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, doc, where } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, doc, where, writeBatch } from 'firebase/firestore';
 import { Check, Crown, LogOut, ShieldCheck } from 'lucide-react';
 import { adminEmail, auth, db, firebaseConfigured } from '../lib/firebase';
 
@@ -107,8 +107,12 @@ export const PremiumAccess: React.FC<{ onClose: () => void }> = ({ onClose }) =>
   const reviewPayment = async (payment: Payment, status: 'approved' | 'rejected') => {
     if (!db) return;
     try {
-      await updateDoc(doc(db, 'paymentRequests', payment.id), { status, reviewedAt: serverTimestamp(), reviewedBy: user?.uid });
-      if (status === 'approved') await setDoc(doc(db, 'users', payment.uid), { premium: true, premiumGrantedAt: serverTimestamp() }, { merge: true });
+      const batch = writeBatch(db);
+      batch.update(doc(db, 'paymentRequests', payment.id), { status, reviewedAt: serverTimestamp(), reviewedBy: user?.uid });
+      if (status === 'approved') {
+        batch.set(doc(db, 'users', payment.uid), { premium: true, premiumGrantedAt: serverTimestamp() }, { merge: true });
+      }
+      await batch.commit();
       setMessage(`Payment ${status}.`);
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Hindi na-update ang request.'); }
   };

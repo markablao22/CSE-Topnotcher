@@ -24,8 +24,11 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(['uid', 'email', 'amount', 'reference', 'status', 'createdAt']);
       allow read: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
       allow update: if isAdmin()
+        && resource.data.status == 'pending'
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reviewedAt', 'reviewedBy'])
-        && request.resource.data.status in ['approved', 'rejected'];
+        && request.resource.data.status in ['approved', 'rejected']
+        && request.resource.data.reviewedBy == request.auth.uid
+        && request.resource.data.reviewedAt == request.time;
       allow delete: if false;
     }
 
