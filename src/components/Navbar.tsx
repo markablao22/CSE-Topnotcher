@@ -50,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   CSE Topnotcher
                 </span>
                 <span className="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-sm bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
-                  500 Qs
+                  65 Free Qs
                 </span>
               </div>
               <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium hidden sm:block">
@@ -121,7 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              Aklatan (500)
+              Aklatan
             </button>
             <button
               onClick={() => { sound.playTap(); onSelectTab('leaderboard'); }}
@@ -256,3 +256,4 @@ export const Navbar: React.FC<NavbarProps> = ({
     </header>
   );
 };
+
